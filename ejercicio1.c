@@ -2,6 +2,7 @@
 
 
 int potencia(int base, int exp);
+int es_par(int n);
 
 int main(void) {
     int base;
@@ -22,6 +23,12 @@ int main(void) {
 
     printf("%d^%d = %d\n", base, exp, resultado);
 
+    if (es_par(resultado)) {
+        printf("El resultado es par.\n");
+    } else {
+        printf("El resultado es impar.\n");
+    }
+
     return 0;
 }
 
@@ -34,4 +41,8 @@ int potencia(int base, int exp) {
     }
 
     return resultado;
+}
+
+int es_par(int n) {
+    return n % 2 == 0;
 }
