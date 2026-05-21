@@ -1,16 +1,37 @@
 #include <stdio.h>
 
+
+int potencia(int base, int exp);
+
+int main(void) {
+    int base;
+    int exp;
+    int resultado;
+
+    do {
+        printf("Ingrese la base (distinta de cero): ");
+        scanf("%d", &base);
+    } while (base == 0);
+
+    do {
+        printf("Ingrese el exponente (no negativo): ");
+        scanf("%d", &exp);
+    } while (exp < 0);
+
+    resultado = potencia(base, exp);
+
+    printf("%d^%d = %d\n", base, exp, resultado);
+
+    return 0;
+}
+
 int potencia(int base, int exp) {
     int resultado = 1;
+
     while (exp > 0) {
         resultado = resultado * base;
         exp = exp - 1;
     }
-    return resultado;
-}
 
-int main(void) {
-    printf("2^8 = %d\n", potencia(2, 8));
-    printf("3^4 = %d\n", potencia(3, 4));
-    return 0;
+    return resultado;
 }
