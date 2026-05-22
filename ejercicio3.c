@@ -1,0 +1,121 @@
+#include <stdio.h>
+#define MAX_SENSORES 10
+
+typedef enum { NORMAL, ALERTA, FALLO } EstadoSensor;
+
+typedef struct {
+    int id;
+    float valor;
+    EstadoSensor estado;
+} Lectura;
+
+EstadoSensor clasificar(float valor);
+int contar_estado(Lectura s[], int n, EstadoSensor e);
+int lectura_extrema(Lectura s[], int n);
+float valor_absoluto(float x);
+void imprimir_estado(EstadoSensor estado);
+
+int main(void) {
+
+    Lectura sensores[MAX_SENSORES];
+    int i;
+    int indice_extremo;
+
+    for (i = 0; i < MAX_SENSORES; i++) {
+	printf("Ingrese el ID del sensor %d: ", i + 1);
+	scanf("%d", &sensores[i].id);
+
+	printf("Ingrese el valor del sensor %d: ", i + 1);
+	scanf("%f", &sensores[i].valor);
+
+	sensores[i].estado = clasificar(sensores[i].valor);
+    }
+
+    printf("\nTabla de lecturas:\n");
+    printf("ID\tValor\tEstado\n");
+
+    for (i = 0; i < MAX_SENSORES; i++) {
+	printf("%d\t%.2f\t", sensores[i].id, sensores[i].valor);
+	imprimir_estado(sensores[i].estado);
+	printf("\n");
+    }
+
+    printf("\nConteo por estado:\n");
+    printf("NORMAL: %d\n", contar_estado(sensores, MAX_SENSORES, NORMAL));
+    printf("ALERTA: %d\n", contar_estado(sensores, MAX_SENSORES, ALERTA));
+    printf("FALLO: %d\n", contar_estado(sensores, MAX_SENSORES, FALLO));
+
+    indice_extremo = lectura_extrema(sensores, MAX_SENSORES);
+
+    printf("\nLectura extrema:\n");
+    printf("ID: %d\n", sensores[indice_extremo].id);
+    printf("Valor: %.2f\n", sensores[indice_extremo].valor);
+
+    return 0;
+}
+
+EstadoSensor clasificar(float valor) {
+    if (valor >= 40.0 && valor <= 60.0) {
+        return NORMAL;
+    }
+
+    if ((valor >= 20.0 && valor < 40.0) ||
+        (valor > 60.0 && valor <= 80.0)) {
+        return ALERTA;
+    }
+
+    return FALLO;
+}
+
+int contar_estado(Lectura s[], int n, EstadoSensor e) {
+    int i;
+    int contador = 0;
+
+    for (i = 0; i < n; i++) {
+	if (s[i].estado == e) {
+	    contador++;
+	}
+    }
+
+    return contador;
+}
+
+int lectura_extrema(Lectura s[], int n) {
+    int i;
+    int indice = 0;
+    float distancia_actual;
+    float distancia_mayor;
+
+    distancia_mayor = valor_absoluto(s[0].valor - 50.0);
+
+    for (i = 1; i < n; i++) {
+	distancia_actual = valor_absoluto(s[i].valor - 50.0);
+
+	if (distancia_actual > distancia_mayor) {
+	    distancia_mayor = distancia_actual;
+	    indice = i;
+	}
+    }
+
+    return indice;
+}
+
+float valor_absoluto(float x) {
+
+    if (x < 0) {
+	return -x;
+    }
+
+    return x;
+}
+
+void imprimir_estado(EstadoSensor estado) {
+
+    if (estado == NORMAL) {
+	printf("NORMAL");
+    } else if (estado == ALERTA) {
+	printf("ALERTA");
+    } else {
+	printf("FALLO");
+    }
+}
